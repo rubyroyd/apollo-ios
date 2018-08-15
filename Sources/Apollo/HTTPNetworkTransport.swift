@@ -52,6 +52,7 @@ public class HTTPNetworkTransport: NetworkTransport {
   let url: URL
   let session: URLSession
   let serializationFormat = JSONSerializationFormat.self
+    public var authToken: String?
   
   /// Creates a network transport with the specified server URL and session configuration.
   ///
@@ -76,6 +77,12 @@ public class HTTPNetworkTransport: NetworkTransport {
   public func send<Operation>(operation: Operation, completionHandler: @escaping (_ response: GraphQLResponse<Operation>?, _ error: Error?) -> Void) -> Cancellable {
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
+    
+    // Apollo injection for auth_token
+    if let token = authToken {
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    }
+    //
     
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
