@@ -12,7 +12,7 @@ public final class GraphQLQueryWatcher<Query: GraphQLQuery>: Cancellable, Apollo
   
   private var dependentKeys: Set<CacheKey>?
   
-  init(client: ApolloClient, query: Query, resultHandler: @escaping GraphQLResultHandler<Query.Data>) {
+  public init(client: ApolloClient, query: Query, resultHandler: @escaping GraphQLResultHandler<Query.Data>) {
     self.client = client
     self.query = query
     self.resultHandler = resultHandler
@@ -25,7 +25,7 @@ public final class GraphQLQueryWatcher<Query: GraphQLQuery>: Cancellable, Apollo
     fetch(cachePolicy: .fetchIgnoringCacheData)
   }
   
-  func fetch(cachePolicy: CachePolicy) {
+  public func fetch(cachePolicy: CachePolicy) {
     fetching = client?.fetch(query: query, cachePolicy: cachePolicy, context: &context) { [weak self] (result, error) in
       guard let `self` = self else { return }
         
